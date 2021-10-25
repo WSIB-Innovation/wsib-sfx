@@ -56,11 +56,29 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: (){},
+                  child: const Icon(Icons.play_arrow),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  onPressed: (){},
+                  child: const Icon(Icons.pause),
+                ),
+              ],
+            )
+            
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
+        
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
