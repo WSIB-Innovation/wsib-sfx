@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -59,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+    playLocalSound();
   }
 
   @override
@@ -111,5 +113,15 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Future<AudioPlayer> playLocalSound() async {
+    AudioCache cache = AudioCache();
+    return await cache.play("assets_hat.wav");
+  }
+
+  void playRemoteSound() {
+    AudioPlayer player = AudioPlayer();
+    player.play("https://bit.ly/2CH50TO");
   }
 }
