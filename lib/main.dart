@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   bool play = false;
   bool wasPaused = false;
-  final filePath = "/Users/ping/projects/wsib-sfx/assets/closer.wav";
+  // final filePath = "/Users/ping/projects/wsib-sfx/assets/closer.wav";
   AudioPlayer player = AudioPlayer();
 
   void _audioAction() {
@@ -107,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (wasPaused == true) {
         await player.resume();
       } else {
-        await player.play(filePath, isLocal: true);
+        await player.play("closer.wav", isLocal: true);
       }
       wasPaused = false;
     } else {
