@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -50,6 +52,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  bool play = false;
+  bool wasPaused = false;
+  final filePath = "/Users/ping/projects/wsib-sfx/assets/closer.wav";
+  AudioPlayer player = AudioPlayer();
 
   void _incrementCounter() {
     setState(() {
@@ -60,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
-    playLocalSound();
+    playRemoteSound();
   }
 
   @override
@@ -117,11 +123,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<AudioPlayer> playLocalSound() async {
     AudioCache cache = AudioCache();
-    return await cache.play("assets_hat.wav");
+    if (play != false) {
+      play = false;
+    }
+
+    return await cache.play("crickets.wav");
   }
 
-  void playRemoteSound() {
-    AudioPlayer player = AudioPlayer();
-    player.play("https://bit.ly/2CH50TO");
+  void playRemoteSound() async {
+    play = !play;
+    if (play == true) {
+      print("play");
+      if (wasPaused == true) {
+        await player.resume();
+      } else {
+        await player.play(filePath, isLocal: true);
+      }
+      wasPaused = false;
+    } else {
+      print("pause");
+      wasPaused = true;
+      await player.pause();
+    }
   }
 }
