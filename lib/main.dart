@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 // custom sounds
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,10 +34,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   bool play = false;
   bool wasPaused = false;
-  // final filePath = "/Users/ping/projects/wsib-sfx/assets/closer.wav";
   AudioPlayer player = AudioPlayer();
 
   void _audioAction() {
@@ -58,24 +58,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ElevatedButton(
                   onPressed: () {
                     _audioAction();
-                    setState(() {});
                   },
-                  child: (play == true) ? const Icon(Icons.pause_circle_outline)
-                  : const Icon(Icons.play_arrow_outlined),
-                ),
-                const SizedBox(
-                  width: 10,
+                  child: (play == false) ? const Icon(Icons.play_arrow_outlined)
+                  : const Icon(Icons.pause_circle_outline),
                 ),
               ],
             )
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 
@@ -89,13 +80,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void playRemoteSound() async {
+    final file = File('${(await getTemporaryDirectory()).path}/music.mp3');
+    await file.writeAsBytes((await rootBundle.load('assets/closer.wav')).buffer.asUint8List());
     play = !play;
     if (play == true) {
       print("play");
       if (wasPaused == true) {
         await player.resume();
       } else {
-        await player.play("closer.wav", isLocal: true);
+        await player.play(file.path, isLocal: true);
       }
       wasPaused = false;
     } else {
@@ -103,5 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
       wasPaused = true;
       await player.pause();
     }
+    setState(() {});
   }
 }
