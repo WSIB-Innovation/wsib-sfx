@@ -38,10 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final filePath = "/Users/ping/projects/wsib-sfx/assets/closer.wav";
   AudioPlayer player = AudioPlayer();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  void _audioAction() {
     playRemoteSound();
   }
 
@@ -66,14 +63,18 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _audioAction();
+                  },
                   child: const Icon(Icons.play_arrow),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _audioAction();
+                  },
                   child: const Icon(Icons.pause),
                 ),
               ],
@@ -81,11 +82,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _incrementCounter,
+      //   tooltip: 'Increment',
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 
