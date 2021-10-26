@@ -52,30 +52,19 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   onPressed: () {
                     _audioAction();
+                    setState(() {});
                   },
-                  child: const Icon(Icons.play_arrow),
+                  child: (play == true) ? const Icon(Icons.pause_circle_outline)
+                  : const Icon(Icons.play_arrow_outlined),
                 ),
                 const SizedBox(
                   width: 10,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _audioAction();
-                  },
-                  child: const Icon(Icons.pause),
                 ),
               ],
             )
@@ -90,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // Use AudioCache objects for local sound files
   Future<AudioPlayer> playLocalSound() async {
     AudioCache cache = AudioCache();
     if (play != false) {
