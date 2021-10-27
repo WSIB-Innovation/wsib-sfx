@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Sound Effects'),
     );
   }
 }
@@ -45,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[100],
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -52,33 +53,42 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Song with play and pause functionality"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    _audioAction();
-                  },
-                  child: (play == false)
-                      ? const Icon(Icons.play_arrow_outlined)
-                      : const Icon(Icons.pause_circle_outline),
-                ),
-              ],
+            Container(
+              padding: const EdgeInsets.all(15),
+              child: const Text("Button with play and pause functionality"),
             ),
-            SizedBox(height: 20),
-            Text("Button with short sound effect"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    playLocalSound();
-                  },
-                  child: const Icon(Icons.play_arrow_outlined),
-                ),
-              ],
-            )
+            ElevatedButton(
+              onPressed: () {
+                _audioAction();
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: (play == false)
+                  ? const Icon(Icons.play_arrow_outlined)
+                  : const Icon(Icons.pause_circle_outline),
+              ),
+              style: ElevatedButton.styleFrom(shape: const CircleBorder()),
+            ),
+            Container(
+              padding: const EdgeInsets.all(15),
+              child: const Text("Button with short sound effect"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                playLocalSound();
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: const Icon(Icons.play_arrow_outlined),
+              ),
+              style: ElevatedButton.styleFrom(shape: const CircleBorder()),
+            ),
           ],
         ),
       ),
