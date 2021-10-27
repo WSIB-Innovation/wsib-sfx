@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text("Song with play and pause functionality"),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -59,8 +60,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {
                     _audioAction();
                   },
-                  child: (play == false) ? const Icon(Icons.play_arrow_outlined)
-                  : const Icon(Icons.pause_circle_outline),
+                  child: (play == false)
+                      ? const Icon(Icons.play_arrow_outlined)
+                      : const Icon(Icons.pause_circle_outline),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Text("Button with short sound effect"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    playLocalSound();
+                  },
+                  child: const Icon(Icons.play_arrow_outlined),
                 ),
               ],
             )
@@ -72,16 +87,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<AudioPlayer> playLocalSound() async {
     AudioCache cache = AudioCache();
-    if (play != false) {
-      play = false;
-    }
-
-    return await cache.play("crickets.wav");
+    return await cache.play("assets_hat.wav");
   }
 
   void playRemoteSound() async {
     final file = File('${(await getTemporaryDirectory()).path}/music.mp3');
-    await file.writeAsBytes((await rootBundle.load('assets/closer.wav')).buffer.asUint8List());
+    await file.writeAsBytes(
+        (await rootBundle.load('assets/closer.wav')).buffer.asUint8List());
     play = !play;
     if (play == true) {
       print("play");
