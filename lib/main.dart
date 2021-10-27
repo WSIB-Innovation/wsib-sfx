@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-// custom sounds
+
+// necessary imports
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,11 +16,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: "WSIB SFX",
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Sound Effects'),
+      home: const MyHomePage(title: "Sound Effects"),
     );
   }
 }
@@ -36,11 +36,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool play = false;
   bool wasPaused = false;
+  // an instance can only play a single audio at once
   AudioPlayer player = AudioPlayer();
-
-  void _audioAction() {
-    playRemoteSound();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                _audioAction();
+                playLocalSoundAP();
               },
               child: Container(
                 width: 50,
@@ -78,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                playLocalSound();
+                playLocalSoundAC();
               },
               child: Container(
                 width: 50,
@@ -95,21 +92,26 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future<AudioPlayer> playLocalSound() async {
+  // convenient for buttons and other common sounds
+  void playLocalSoundAC() async {
     AudioCache cache = AudioCache();
-    return await cache.play("assets_hat.wav");
+    await cache.play('assets_hat.wav');
   }
 
-  void playRemoteSound() async {
-    final file = File('${(await getTemporaryDirectory()).path}/music.mp3');
+  // allows better control of audio
+  void playLocalSoundAP() async {
+    // write audio to temporary location
+    final file = File('${(await getTemporaryDirectory()).path}/sounds.mp3');
     await file.writeAsBytes(
         (await rootBundle.load('assets/closer.wav')).buffer.asUint8List());
+
     play = !play;
     if (play == true) {
       print("play");
       if (wasPaused == true) {
         await player.resume();
       } else {
+        // note that AudioPlayer needs a network path, unlike AudioCache
         await player.play(file.path, isLocal: true);
       }
       wasPaused = false;
@@ -118,6 +120,13 @@ class _MyHomePageState extends State<MyHomePage> {
       wasPaused = true;
       await player.pause();
     }
+    // update UI
     setState(() {});
+  }
+
+  // requires internet connection, has some delay
+  void playRemoteSound() async {
+    AudioPlayer remotePlayer = AudioPlayer();
+    remotePlayer.play('https://bit.ly/2CH50TO');
   }
 }
