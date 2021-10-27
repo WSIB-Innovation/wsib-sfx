@@ -1,6 +1,6 @@
 # wsib_sounds
 
-#Plugins
+# Plugins
 audioplayers: https://pub.dev/packages/audioplayers
 
 ## Foreword
