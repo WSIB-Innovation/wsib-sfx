@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 // custom sounds
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Sound Effects'),
     );
   }
 }
@@ -32,10 +34,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   bool play = false;
   bool wasPaused = false;
-  // final filePath = "/Users/ping/projects/wsib-sfx/assets/closer.wav";
   AudioPlayer player = AudioPlayer();
 
   void _audioAction() {
@@ -45,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[100],
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -52,62 +53,64 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Container(
+              padding: const EdgeInsets.all(15),
+              child: const Text("Button with play and pause functionality"),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            ElevatedButton(
+              onPressed: () {
+                _audioAction();
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: (play == false)
+                  ? const Icon(Icons.play_arrow_outlined)
+                  : const Icon(Icons.pause_circle_outline),
+              ),
+              style: ElevatedButton.styleFrom(shape: const CircleBorder()),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    _audioAction();
-                  },
-                  child: const Icon(Icons.play_arrow),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _audioAction();
-                  },
-                  child: const Icon(Icons.pause),
-                ),
-              ],
-            )
+            Container(
+              padding: const EdgeInsets.all(15),
+              child: const Text("Button with short sound effect"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                playLocalSound();
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: const Icon(Icons.play_arrow_outlined),
+              ),
+              style: ElevatedButton.styleFrom(shape: const CircleBorder()),
+            ),
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 
-  // Use AudioCache objects for local sound files
   Future<AudioPlayer> playLocalSound() async {
     AudioCache cache = AudioCache();
-    if (play != false) {
-      play = false;
-    }
-
-    return await cache.play("crickets.wav");
+    return await cache.play("assets_hat.wav");
   }
 
   void playRemoteSound() async {
+    final file = File('${(await getTemporaryDirectory()).path}/music.mp3');
+    await file.writeAsBytes(
+        (await rootBundle.load('assets/closer.wav')).buffer.asUint8List());
     play = !play;
     if (play == true) {
       print("play");
       if (wasPaused == true) {
         await player.resume();
       } else {
-        await player.play("closer.wav", isLocal: true);
+        await player.play(file.path, isLocal: true);
       }
       wasPaused = false;
     } else {
@@ -115,5 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
       wasPaused = true;
       await player.pause();
     }
+    setState(() {});
   }
 }
